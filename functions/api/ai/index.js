@@ -1,4 +1,4 @@
-export async function onRequest({ request }) {
+export async function onRequest({ request, env }) {
   try {
     const { model, messages } = await request.json();
     if (!model || !messages) {
@@ -6,19 +6,19 @@ export async function onRequest({ request }) {
     }
 
     if (model === 'deepseek-chat' || model === 'deepseek-reasoner') {
-      return proxyDeepSeek(messages, model);
+      return proxyDeepSeek(messages, model, env);
     } else if (model === 'gpt-4o-mini') {
-      return proxyOpenAI(messages);
+      return proxyOpenAI(messages, env);
     } else if (model === 'gemini-flash') {
-      return proxyGemini(messages);
+      return proxyGemini(messages, env);
     } else if (model === 'nebius-studio') {
-      return proxyNebius(messages);
+      return proxyNebius(messages, env);
     } else if (model === 'claude') {
-      return proxyClaude(messages);
+      return proxyClaude(messages, env);
     } else if (model === 'gemini-flash-lite') {
-      return proxyGeminiFlashLite(messages);
+      return proxyGeminiFlashLite(messages, env);
     } else if (model === 'gemini-2-5-flash-lite') {
-      return proxyGemini25FlashLite(messages);
+      return proxyGemini25FlashLite(messages, env);
     } else {
       return new Response(JSON.stringify({ error: 'Unknown model' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
@@ -27,8 +27,8 @@ export async function onRequest({ request }) {
   }
 }
 
-async function proxyDeepSeek(messages, model) {
-  const apiKey = "sk-85440b9e9dd145e1a200cf188e98f499"; // process.env.DEEPSEEK_API_KEY;
+async function proxyDeepSeek(messages, model, env) {
+  const apiKey = env.DEEPSEEK_API_KEY;
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'DEEPSEEK_API_KEY not set in environment' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
@@ -52,8 +52,8 @@ async function proxyDeepSeek(messages, model) {
   return streamProxy(res);
 }
 
-async function proxyOpenAI(messages) {
-  const apiKey = process.env.OPENAI_API_KEY;
+async function proxyOpenAI(messages, env) {
+  const apiKey = env.OPENAI_API_KEY;
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'OPENAI_API_KEY not set in environment' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
@@ -72,8 +72,8 @@ async function proxyOpenAI(messages) {
   return streamProxy(res);
 }
 
-async function proxyGemini(messages) {
-  const apiKey = process.env.GEMINI_API_KEY;
+async function proxyGemini(messages, env) {
+  const apiKey = env.GEMINI_API_KEY;
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'GEMINI_API_KEY not set in environment' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
@@ -98,8 +98,8 @@ async function proxyGemini(messages) {
   return streamProxy(res);
 }
 
-async function proxyNebius(messages) {
-  const apiKey = process.env.NEBIUS_API_KEY;
+async function proxyNebius(messages, env) {
+  const apiKey = env.NEBIUS_API_KEY;
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'NEBIUS_API_KEY not set in environment' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
@@ -125,8 +125,8 @@ async function proxyNebius(messages) {
   return streamProxy(res);
 }
 
-async function proxyClaude(messages) {
-  const apiKey = process.env.CLAUDE_API_KEY;
+async function proxyClaude(messages, env) {
+  const apiKey = env.CLAUDE_API_KEY;
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'CLAUDE_API_KEY not set in environment' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
@@ -148,8 +148,8 @@ async function proxyClaude(messages) {
   return streamProxy(res);
 }
 
-async function proxyGeminiFlashLite(messages) {
-  const apiKey = process.env.GEMINI_API_KEY;
+async function proxyGeminiFlashLite(messages, env) {
+  const apiKey = env.GEMINI_API_KEY;
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'GEMINI_API_KEY not set in environment' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
@@ -179,8 +179,8 @@ async function proxyGeminiFlashLite(messages) {
   return streamProxy(res);
 }
 
-async function proxyGemini25FlashLite(messages) {
-  const apiKey = process.env.GEMINI_API_KEY;
+async function proxyGemini25FlashLite(messages, env) {
+  const apiKey = env.GEMINI_API_KEY;
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'GEMINI_API_KEY not set in environment' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }

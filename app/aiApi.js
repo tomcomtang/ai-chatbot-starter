@@ -18,13 +18,18 @@ function parseReasoningAndContent(fullContent) {
 export async function fetchAIStreamResponse(model, text, messages, onChunk) {
   let aiContent = "";
   let aiReasoning = ""; // 专门存储 DeepSeek Reasoner 的 reasoning_content
+  const controller = new AbortController();
+  // 超时时间设为10分钟（600000毫秒）
+  const timeoutId = setTimeout(() => controller.abort(), 600000);
   try {
     // const res = await fetch("http://localhost:8088/api/ai", {
     const res = await fetch("/api/ai", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ model, messages }),
+      signal: controller.signal,
     });
+    clearTimeout(timeoutId);
     if (!res.ok) {
       throw new Error(`HTTP error! status: ${res.status} ${res.statusText}`);
     }
@@ -135,6 +140,7 @@ export async function fetchAIStreamResponse(model, text, messages, onChunk) {
     aiContent = "[Error contacting AI service]";
     console.error(e);
     onChunk(aiContent, "", true);
+    clearTimeout(timeoutId);
   }
   return { aiContent, aiReasoning: "" };
 } 
