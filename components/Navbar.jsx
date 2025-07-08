@@ -15,7 +15,7 @@ export default function Navbar() {
       </div>
       <div className="flex items-center gap-4">
         <a
-          href="https://github.com/tomcomtang/ai-chartbot-starter"
+          href="https://github.com/tomcomtang/ai-chatbot-starter"
           target="_blank"
           rel="noopener noreferrer"
           className="text-xl transition-all duration-200 hover:text-blue-600 hover:scale-110"
