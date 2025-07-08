@@ -29,7 +29,7 @@ export async function onRequest({ request }) {
 }
 
 async function proxyDeepSeek(messages, model) {
-  const apiKey = process.env.DEEPSEEK_API_KEY;
+  const apiKey = "sk-85440b9e9dd145e1a200cf188e98f499"; // process.env.DEEPSEEK_API_KEY;
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'DEEPSEEK_API_KEY not set in environment' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
@@ -172,6 +172,7 @@ async function proxyGeminiFlashLite(messages) {
       safetySettings: [],
     }),
   });
+  
   if (!res.ok) {
     const errText = await res.text();
     return new Response(JSON.stringify({ error: errText }), { status: res.status, headers: { 'Content-Type': 'application/json' } });

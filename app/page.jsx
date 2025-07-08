@@ -46,8 +46,6 @@ export default function Home() {
 
   // 流式输出回调函数
   const handleStreamChunk = useCallback((content, reasoning, isComplete) => {
-    console.log('UI update callback:', { content: content.substring(0, 50) + '...', reasoning: reasoning?.substring(0, 50) + '...', isComplete });
-    
     // 使用 flushSync 确保立即更新
     flushSync(() => {
       setMessages((prevMsgs) => {
@@ -99,7 +97,6 @@ export default function Home() {
             })
           };
         }
-        console.log('Updated message at index:', idx, 'with content length:', content.length, 'reasoning length:', reasoning?.length || 0, 'isComplete:', isComplete);
         return newMsgs;
       });
     });

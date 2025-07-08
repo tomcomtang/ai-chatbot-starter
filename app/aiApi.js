@@ -19,6 +19,7 @@ export async function fetchAIStreamResponse(model, text, messages, onChunk) {
   let aiContent = "";
   let aiReasoning = ""; // 专门存储 DeepSeek Reasoner 的 reasoning_content
   try {
+    // const res = await fetch("http://localhost:8088/api/ai", {
     const res = await fetch("/api/ai", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -32,6 +33,7 @@ export async function fetchAIStreamResponse(model, text, messages, onChunk) {
     let buffer = "";
     let isComplete = false;
     while (true) {
+      console.log("reading");
       const { done, value } = await reader.read();
       if (done) break;
       buffer += decoder.decode(value, { stream: true });
