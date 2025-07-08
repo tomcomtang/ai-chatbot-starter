@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 美化 markdown 渲染的 prose 样式 */
+.prose {
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  font-weight: 700;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+.prose p {
+  margin-top: 0.7em;
+  margin-bottom: 0.7em;
+}
+.prose ul, .prose ol {
+  margin-top: 0.7em;
+  margin-bottom: 0.7em;
+  padding-left: 1.5em;
+}
+.prose code {
+  background: #f3f4f6;
+  color: #2563eb;
+  border-radius: 4px;
+  padding: 0.2em 0.4em;
+  font-size: 0.97em;
+}
+.prose pre {
+  background: #23272e;
+  color: #f8f8f2;
+  border-radius: 8px;
+  padding: 1em;
+  font-size: 0.98em;
+  margin: 1em 0;
+  overflow-x: auto;
+}
+.prose pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+}
+.prose table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+.prose th, .prose td {
+  border: 1px solid #e5e7eb;
+  padding: 0.5em 0.8em;
+}
+.prose blockquote {
+  border-left: 4px solid #2563eb;
+  background: #f0f6ff;
+  color: #2563eb;
+  padding: 0.5em 1em;
+  margin: 1em 0;
+  border-radius: 0 6px 6px 0;
+}
+
+/* 保证AI消息icon和内容首行顶部严格对齐 */
+.prose > *:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.prose pre, .user-message-markdown pre {
+  max-width: 100%;
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow-x: auto;
+}
+
+/* 回到底部按钮美化 */
+.scroll-to-bottom-btn {
+  background: #e5e7eb;
+  border: none;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.08);
+  transition: background 0.2s, transform 0.2s;
+}
+.scroll-to-bottom-btn:hover {
+  background: #fff;
+  transform: scale(1.12);
+}
+.scroll-to-bottom-btn svg {
+  color: #222;
+  transition: color 0.2s;
+} 
