@@ -12,7 +12,7 @@ const SYSTEM_PROMPT = "You are a helpful AI assistant. When appropriate, you may
 export default function Home() {
   const [messages, setMessages] = useState([]);
   const [isThinking, setIsThinking] = useState(false);
-  const [selectedModel, setSelectedModel] = useState("deepseek-reasoner");
+  const [selectedModel, setSelectedModel] = useState("deepseek-chat");
   const chatBottomRef = useRef(null);
   const [showScrollDown, setShowScrollDown] = useState(false);
   const chatAreaRef = useRef(null);

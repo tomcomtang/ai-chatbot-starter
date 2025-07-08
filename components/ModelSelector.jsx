@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 
 const MODELS = [
-  { value: "deepseek-reasoner", label: "DeepSeek-R1", disabled: false },
   { value: "deepseek-chat", label: "DeepSeek-V3", disabled: false },
+  { value: "deepseek-reasoner", label: "DeepSeek-R1", disabled: false },
   { value: "gpt-4o-mini", label: "GPT-4o Mini (OpenAI)", disabled: true },
   { value: "claude", label: "Claude 3 Sonnet (Anthropic)", disabled: true },
   { value: "gemini-flash", label: "Gemini 2.0 Flash (Google)", disabled: true },
