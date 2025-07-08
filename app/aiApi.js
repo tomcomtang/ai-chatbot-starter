@@ -38,7 +38,6 @@ export async function fetchAIStreamResponse(model, text, messages, onChunk) {
     let buffer = "";
     let isComplete = false;
     while (true) {
-      console.log("reading");
       const { done, value } = await reader.read();
       if (done) break;
       buffer += decoder.decode(value, { stream: true });

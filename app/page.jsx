@@ -60,7 +60,6 @@ export default function Home() {
         }
         
         if (idx === -1) {
-          console.warn('No assistant message found, creating new one');
           return [...prevMsgs, { 
             role: "assistant", 
             content: content, 
@@ -135,7 +134,6 @@ export default function Home() {
     try {
       await fetchAIStreamResponse(selectedModel, text, messagesForApi, handleStreamChunk);
     } catch (error) {
-      console.error('Streaming error:', error);
       setMessages((prevMsgs) => {
         const idx = prevMsgs.findIndex((msg) => msg.loading);
         if (idx === -1) return prevMsgs.map(msg => {
