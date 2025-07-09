@@ -2,19 +2,19 @@ export async function onRequest({ request, env }) {
   // try {
     // 限频检查
     const clientIP = request.eo && request.eo.clientIp ? request.eo.clientIp : 'unknown-ip';
-    const allowed = await checkRateLimit(clientIP);
-    if (!allowed) {
-      const DAILY_LIMIT = 3;
-      return new Response(JSON.stringify({
-        error: `Daily usage limit exceeded. You have used up your ${DAILY_LIMIT} daily requests. Please try again tomorrow.`,
-        remaining: 0
-      }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
+    // const allowed = await checkRateLimit(clientIP);
+    // if (!allowed) {
+    //   const DAILY_LIMIT = 3;
+    //   return new Response(JSON.stringify({
+    //     error: `Daily usage limit exceeded. You have used up your ${DAILY_LIMIT} daily requests. Please try again tomorrow.`,
+    //     remaining: 0
+    //   }), {
+    //     status: 400,
+    //     headers: { 'Content-Type': 'application/json' }
+    //   });
+    // }
 
-    return new Response(JSON.stringify({"test": 12345, clientIP, allowed}), { status: 200, headers: { 'Content-Type': 'application/json' }});
+    return new Response(JSON.stringify({clientIP}), { status: 200, headers: { 'Content-Type': 'application/json' }});
 
     // const { model, messages } = await request.json();
     // if (!model || !messages) {
