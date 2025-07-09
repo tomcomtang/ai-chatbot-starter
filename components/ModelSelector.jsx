@@ -103,10 +103,10 @@ export default function ModelSelector({ value, onChange, borderless }) {
               className={`px-4 py-2 text-base whitespace-nowrap transition-colors
                 ${idx === 0 ? 'rounded-t-xl' : ''} 
                 ${idx === MODELS.length - 1 ? 'rounded-b-xl' : ''}
-                ${m.disabled ? 'text-gray-400 bg-gray-100 cursor-not-allowed' :
-                  value === m.value ? "bg-gray-300 text-gray-800 cursor-pointer" :
-                  highlight === idx ? "bg-gray-200 text-gray-800 cursor-pointer" :
-                  "hover:bg-gray-200 hover:text-gray-800 cursor-pointer"}
+                ${m.disabled ? 'text-gray-300 bg-white cursor-not-allowed' :
+                  value === m.value ? "bg-gray-100 text-black cursor-pointer" :
+                  highlight === idx ? "bg-gray-100 text-gray-600 cursor-pointer" :
+                  "bg-white text-gray-600 hover:bg-gray-100 hover:text-gray-600 cursor-pointer"}
               `}
               role="option"
               aria-selected={value === m.value}
