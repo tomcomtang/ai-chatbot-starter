@@ -1,7 +1,8 @@
 export async function onRequest({ request, env }) {
   // try {
     // 限频检查
-    const clientIP = request.eo && request.eo.clientIp ? request.eo.clientIp : 'unknown-ip';
+  const clientIP = request.eo && request.eo.clientIp ? request.eo.clientIp : 'unknown-ip';
+  const value = await checkRateLimit(clientIP);
     // const allowed = await checkRateLimit(clientIP);
     // if (!allowed) {
     //   const DAILY_LIMIT = 3;
@@ -14,7 +15,7 @@ export async function onRequest({ request, env }) {
     //   });
     // }
 
-    return new Response(typeof AI_CHATBOT_LIMIT_DAY, { status: 200, headers: { 'Content-Type': 'application/json' }});
+    return new Response(value, { status: 200, headers: { 'Content-Type': 'application/json' }});
 
     // const { model, messages } = await request.json();
     // if (!model || !messages) {
@@ -236,27 +237,28 @@ export async function onRequest({ request, env }) {
 //   });
 // }
 
-// // 单独的频次检查方法，key为usage:<clientIP>，value为{"date": "YYYY-MM-DD", "count": n}
-// async function checkRateLimit(clientIP) {
-//   const today = new Date().toISOString().split('T')[0];
-//   const key = `usage:${clientIP}`;
-//   let value = await AI_CHATBOT_LIMIT_DAY.get(key);
-//   let usageData = { date: today, count: 0 };
-//   if (value) {
-//     try {
-//       usageData = JSON.parse(value);
-//     } catch {
-//       usageData = { date: today, count: 0 };
-//     }
-//     if (usageData.date !== today) {
-//       usageData = { date: today, count: 0 };
-//     }
-//   }
-//   const DAILY_LIMIT = 3;
-//   if (usageData.count >= DAILY_LIMIT) {
-//     return false;
-//   }
-//   usageData.count += 1;
-//   await AI_CHATBOT_LIMIT_DAY.put(key, JSON.stringify(usageData));
-//   return true;
-// }
+// 单独的频次检查方法，key为usage:<clientIP>，value为{"date": "YYYY-MM-DD", "count": n}
+async function checkRateLimit(clientIP) {
+  const today = new Date().toISOString().split('T')[0];
+  const key = `usage:${clientIP}`;
+  let value = await AI_CHATBOT_LIMIT_DAY.get(key);
+  let usageData = { date: today, count: 0 };
+  if (value) {
+    try {
+      usageData = JSON.parse(value);
+    } catch {
+      usageData = { date: today, count: 0 };
+    }
+    if (usageData.date !== today) {
+      usageData = { date: today, count: 0 };
+    }
+  }
+  return JSON.stringify(usageData);
+  // const DAILY_LIMIT = 3;
+  // if (usageData.count >= DAILY_LIMIT) {
+  //   return false;
+  // }
+  // usageData.count += 1;
+  // await AI_CHATBOT_LIMIT_DAY.put(key, JSON.stringify(usageData));
+  // return true;
+}
