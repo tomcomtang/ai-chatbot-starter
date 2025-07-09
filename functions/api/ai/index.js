@@ -1,7 +1,7 @@
 export async function onRequest({ request, env }) {
   // try {
     // 限频检查
-    const clientIP = request.eo && request.eo.clientIp ? request.eo.clientIp : 'unknown-ip';
+    // const clientIP = request.eo && request.eo.clientIp ? request.eo.clientIp : 'unknown-ip';
     // const allowed = await checkRateLimit(clientIP);
     // if (!allowed) {
     //   const DAILY_LIMIT = 3;
@@ -14,7 +14,7 @@ export async function onRequest({ request, env }) {
     //   });
     // }
 
-    return new Response(JSON.stringify({clientIP}), { status: 200, headers: { 'Content-Type': 'application/json' });
+    return new Response(JSON.stringify({"test": 12345}), { status: 200, headers: { 'Content-Type': 'application/json' });
 
     // const { model, messages } = await request.json();
     // if (!model || !messages) {
