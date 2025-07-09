@@ -1,5 +1,5 @@
 export async function onRequest({ request, env }) {
-  try {
+  // try {
     // 限频检查
     const clientIP = request.eo && request.eo.clientIp ? request.eo.clientIp : 'unknown-ip';
     // const allowed = await checkRateLimit(clientIP);
@@ -38,9 +38,9 @@ export async function onRequest({ request, env }) {
     // } else {
     //   return new Response(JSON.stringify({ error: 'Unknown model' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     // }
-  } catch (e) {
-    return new Response(JSON.stringify({ error: e.message || 'Internal error' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
-  }
+  // } catch (e) {
+  //   return new Response(JSON.stringify({ error: e.message || 'Internal error' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+  // }
 }
 
 async function proxyDeepSeek(messages, model, env) {
