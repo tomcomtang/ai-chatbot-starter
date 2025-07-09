@@ -14,28 +14,30 @@ export async function onRequest({ request, env }) {
       });
     }
 
-    const { model, messages } = await request.json();
-    if (!model || !messages) {
-      return new Response(JSON.stringify({ error: 'Missing model or messages' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
-    }
+    return new Response(JSON.stringify({clientIP, allowed}), { status: 200, headers: { 'Content-Type': 'application/json' });
 
-    if (model === 'deepseek-chat' || model === 'deepseek-reasoner') {
-      return proxyDeepSeek(messages, model, env);
-    } else if (model === 'gpt-4o-mini') {
-      return proxyOpenAI(messages, env);
-    } else if (model === 'gemini-flash') {
-      return proxyGemini(messages, env);
-    } else if (model === 'nebius-studio') {
-      return proxyNebius(messages, env);
-    } else if (model === 'claude') {
-      return proxyClaude(messages, env);
-    } else if (model === 'gemini-flash-lite') {
-      return proxyGeminiFlashLite(messages, env);
-    } else if (model === 'gemini-2-5-flash-lite') {
-      return proxyGemini25FlashLite(messages, env);
-    } else {
-      return new Response(JSON.stringify({ error: 'Unknown model' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
-    }
+    // const { model, messages } = await request.json();
+    // if (!model || !messages) {
+    //   return new Response(JSON.stringify({ error: 'Missing model or messages' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+    // }
+
+    // if (model === 'deepseek-chat' || model === 'deepseek-reasoner') {
+    //   return proxyDeepSeek(messages, model, env);
+    // } else if (model === 'gpt-4o-mini') {
+    //   return proxyOpenAI(messages, env);
+    // } else if (model === 'gemini-flash') {
+    //   return proxyGemini(messages, env);
+    // } else if (model === 'nebius-studio') {
+    //   return proxyNebius(messages, env);
+    // } else if (model === 'claude') {
+    //   return proxyClaude(messages, env);
+    // } else if (model === 'gemini-flash-lite') {
+    //   return proxyGeminiFlashLite(messages, env);
+    // } else if (model === 'gemini-2-5-flash-lite') {
+    //   return proxyGemini25FlashLite(messages, env);
+    // } else {
+    //   return new Response(JSON.stringify({ error: 'Unknown model' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+    // }
   } catch (e) {
     return new Response(JSON.stringify({ error: e.message || 'Internal error' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
