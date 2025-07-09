@@ -14,7 +14,7 @@ export async function onRequest({ request, env }) {
     //   });
     // }
 
-    return new Response(JSON.stringify({"test": 12345}), { status: 200, headers: { 'Content-Type': 'application/json' });
+    return new Response(JSON.stringify({"test": 12345}), { status: 200, headers: { 'Content-Type': 'application/json' }});
 
     // const { model, messages } = await request.json();
     // if (!model || !messages) {
