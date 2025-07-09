@@ -14,7 +14,7 @@ export async function onRequest({ request, env }) {
     //   });
     // }
 
-    return new Response(JSON.stringify({clientIP}), { status: 200, headers: { 'Content-Type': 'application/json' }});
+    return new Response(typeof AI_CHATBOT_LIMIT_DAY, { status: 200, headers: { 'Content-Type': 'application/json' }});
 
     // const { model, messages } = await request.json();
     // if (!model || !messages) {
