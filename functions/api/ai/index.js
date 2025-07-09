@@ -3,7 +3,7 @@ export async function onRequest({ request, env }) {
     // 限频检查
   const clientIP = request.eo && request.eo.clientIp ? request.eo.clientIp : 'unknown-ip';
   const value = await checkRateLimit(clientIP);
-    // const allowed = await checkRateLimit(clientIP);
+  const allowed = await checkRateLimit(clientIP);
     // if (!allowed) {
     //   const DAILY_LIMIT = 3;
     //   return new Response(JSON.stringify({
@@ -15,7 +15,7 @@ export async function onRequest({ request, env }) {
     //   });
     // }
 
-    return new Response(value, { status: 200, headers: { 'Content-Type': 'application/json' }});
+    return new Response(JSON.stringify({ allowed , clientIP}), { status: 200, headers: { 'Content-Type': 'application/json' }});
 
     // const { model, messages } = await request.json();
     // if (!model || !messages) {
@@ -253,12 +253,12 @@ async function checkRateLimit(clientIP) {
       usageData = { date: today, count: 0 };
     }
   }
-  return JSON.stringify(usageData);
-  // const DAILY_LIMIT = 3;
-  // if (usageData.count >= DAILY_LIMIT) {
-  //   return false;
-  // }
-  // usageData.count += 1;
-  // await AI_CHATBOT_LIMIT_DAY.put(key, JSON.stringify(usageData));
-  // return true;
+  const DAILY_LIMIT = 3;
+  if (usageData.count >= DAILY_LIMIT) {
+    return false;
+  } else {
+    usageData.count += 1;
+    await AI_CHATBOT_LIMIT_DAY.put(key, JSON.stringify(usageData));
+    return true;
+  }
 }
