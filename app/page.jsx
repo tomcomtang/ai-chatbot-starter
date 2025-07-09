@@ -19,6 +19,24 @@ export default function Home() {
   // 新增：首屏动画状态
   const [showWelcome, setShowWelcome] = useState(true);
   const [welcomeFade, setWelcomeFade] = useState(false); // 控制淡出
+  // 新增：错误提示状态
+  const [errorTip, setErrorTip] = useState("");
+  const [showErrorTip, setShowErrorTip] = useState(false);
+
+  // 显示错误提示的函数
+  const showErrorTipMessage = useCallback((message) => {
+    setErrorTip(message);
+    setShowErrorTip(true);
+    // 5秒后自动隐藏
+    setTimeout(() => {
+      setShowErrorTip(false);
+    }, 5000);
+  }, []);
+
+  // 隐藏错误提示的函数
+  const hideErrorTip = useCallback(() => {
+    setShowErrorTip(false);
+  }, []);
 
   // 滚动到底部的函数
   const scrollToBottom = () => {
@@ -158,6 +176,7 @@ export default function Home() {
         });
       });
       setIsThinking(false);
+      showErrorTipMessage(`AI request failed: ${error?.message || error?.toString() || "Unknown error"}`);
     }
   };
 
@@ -172,6 +191,28 @@ export default function Home() {
   return (
     <div className="flex flex-col h-screen">
       <Navbar />
+      {/* 错误提示横幅 */}
+      {showErrorTip && (
+        <div className="fixed top-14 left-0 right-0 z-50 bg-red-500 text-white px-4 py-3 shadow-lg">
+          <div className="max-w-2xl mx-auto flex items-center justify-between">
+            <div className="flex items-center">
+              <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+              <span className="text-sm font-medium">{errorTip}</span>
+            </div>
+            <button
+              onClick={hideErrorTip}
+              className="ml-4 text-white hover:text-red-100 transition-colors"
+              aria-label="Close error message"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
       <div className={`flex-1 flex flex-col overflow-hidden relative`}>
         {/* 首屏动画包裹 */}
         {showWelcome && (

@@ -31,7 +31,17 @@ export async function fetchAIStreamResponse(model, text, messages, onChunk) {
     });
     clearTimeout(timeoutId);
     if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status} ${res.statusText}`);
+      // 尝试解析错误响应
+      let errorMessage = `HTTP error! status: ${res.status} ${res.statusText}`;
+      try {
+        const errorData = await res.json();
+        if (errorData.error) {
+          errorMessage = errorData.error;
+        }
+      } catch (e) {
+        // 如果无法解析JSON，使用默认错误信息
+      }
+      throw new Error(errorMessage);
     }
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
