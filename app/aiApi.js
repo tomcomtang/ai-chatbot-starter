@@ -22,12 +22,11 @@ export async function fetchAIStreamResponse(model, text, messages, onChunk) {
   // 超时时间设为10分钟（600000毫秒）
   const timeoutId = setTimeout(() => controller.abort(), 600000);
   try {
-    // const res = await fetch("http://localhost:8088/api/ai", {
     const res = await fetch("/api/ai", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ model, messages }),
-      signal: controller.signal,
+      signal: controller.signal
     });
     clearTimeout(timeoutId);
     if (!res.ok) {
@@ -146,10 +145,10 @@ export async function fetchAIStreamResponse(model, text, messages, onChunk) {
       }
     }
   } catch (e) {
-    aiContent = "[Error contacting AI service]";
     console.error(e);
-    onChunk(aiContent, "", true);
     clearTimeout(timeoutId);
+    // 重新抛出错误，让调用方处理
+    throw e;
   }
   return { aiContent, aiReasoning: "" };
 } 
