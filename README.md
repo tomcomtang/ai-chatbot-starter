@@ -1,6 +1,6 @@
-# Multi-model AI Chatbot Starter
+# AI Chatbot Starter
 
-A modern AI chatbot starter template built with a frontend and Edge Functions (no backend server required). Easily switch between multiple AI models and deploy instantly to the cloud.
+A modern AI chatbot template built on Tencent Cloud EdgeOne, supporting multiple AI models with real-time streaming responses. No traditional backend required.
 
 ## 🚀 One-click Deploy
 
