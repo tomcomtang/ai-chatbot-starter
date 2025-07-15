@@ -11,6 +11,7 @@ export default function Home() {
   const [messages, setMessages] = useState([]);
   const [isThinking, setIsThinking] = useState(false);
   const [selectedModel, setSelectedModel] = useState("deepseek-chat");
+  const [availableModels, setAvailableModels] = useState([]);
   const chatBottomRef = useRef(null);
   const [showScrollDown, setShowScrollDown] = useState(false);
   const chatAreaRef = useRef(null);
@@ -20,6 +21,41 @@ export default function Home() {
   // 新增：错误提示状态
   const [errorTip, setErrorTip] = useState("");
   const [showErrorTip, setShowErrorTip] = useState(false);
+
+  // 获取可用模型列表并确保选中的模型有效
+  useEffect(() => {
+    async function fetchAvailableModels() {
+      try {
+        // 调用EdgeOne Functions的API
+        const response = await fetch('/api/models', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({})
+        });
+        const data = await response.json();
+        setAvailableModels(data.models);
+        
+        // 检查当前选中的模型是否在可用列表中
+        const isCurrentModelAvailable = data.models.some(model => model.value === selectedModel);
+        if (!isCurrentModelAvailable && data.models.length > 0) {
+          // 如果当前模型不可用，切换到第一个可用模型
+          setSelectedModel(data.models[0].value);
+        }
+      } catch (error) {
+        console.error('Failed to fetch available models:', error);
+        // 如果API调用失败，使用默认的DeepSeek模型
+        const defaultModels = [
+          { value: "deepseek-chat", label: "DeepSeek-V3", disabled: false },
+          { value: "deepseek-reasoner", label: "DeepSeek-R1", disabled: false }
+        ];
+        setAvailableModels(defaultModels);
+      }
+    }
+    
+    fetchAvailableModels();
+  }, [selectedModel]);
 
   // 显示错误提示的函数
   const showErrorTipMessage = useCallback((message) => {
