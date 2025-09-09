@@ -47,7 +47,7 @@ You need to install EdgeOne CLI globally and follow the official steps to run lo
    npm install -g edgeone
    ```
 
-   For more commands, see the [scaffolding document](https://cloud.tencent.com/document/product/1552/101581).
+   For more commands, see the [scaffolding document](https://pages.edgeone.ai/document/edgeone-cli).
 
 2. **Function Initialization:**
 
@@ -71,12 +71,10 @@ You need to install EdgeOne CLI globally and follow the official steps to run lo
    edgeone pages dev
    ```
 
-   This will start the local proxy service and enable function debugging (usually at http://localhost:8788).
+   This will start the local proxy service and enable function debugging (usually at http://localhost:8088).
 
 5. **Function Release:**
    Push code to the remote repository to automatically build and release the function.
-
-> For more details, see the [EdgeOne Pages documentation](https://cloud.tencent.com/document/product/1552/101581).
 
 ---
 
