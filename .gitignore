@@ -37,10 +37,4 @@ coverage/
 # Optional: lock files (uncomment if you want to ignore lock files)
 # package-lock.json
 # yarn.lock
-# pnpm-lock.yaml 
-# Tencent Cloud EdgeOne
-.env
-.edgeone/*
-!.edgeone/project.json
-.tef_dist/*
-  
+# pnpm-lock.yaml
