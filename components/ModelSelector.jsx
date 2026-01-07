@@ -8,11 +8,11 @@ export default function ModelSelector({ value, onChange, borderless }) {
   const btnRef = useRef(null);
   const menuRef = useRef(null);
 
-  // 获取可用模型列表
+  // Get available models list
   useEffect(() => {
     async function fetchModels() {
       try {
-        // 调用EdgeOne Functions的API
+        // Call EdgeOne Functions API
         const response = await fetch('/api/models', {
           method: 'POST',
           headers: {
@@ -24,7 +24,7 @@ export default function ModelSelector({ value, onChange, borderless }) {
         setModels(data.models);
       } catch (error) {
         console.error('Failed to fetch models:', error);
-        // 如果API调用失败，使用默认的DeepSeek模型
+        // If API call fails, use default DeepSeek models
         setModels([
           { value: "deepseek-chat", label: "DeepSeek-V3", disabled: false },
           { value: "deepseek-reasoner", label: "DeepSeek-R1", disabled: false }
@@ -45,7 +45,7 @@ export default function ModelSelector({ value, onChange, borderless }) {
     }
   }, [open]);
 
-  // 关闭下拉菜单（点击外部或失焦）
+  // Close dropdown menu (click outside or lose focus)
   useEffect(() => {
     function handleClick(e) {
       if (
@@ -75,7 +75,7 @@ export default function ModelSelector({ value, onChange, borderless }) {
     };
   }, [open]);
 
-  // 键盘导航
+  // Keyboard navigation
   function handleKeyDown(e) {
     if (!open) return;
     if (e.key === "ArrowDown") {
@@ -94,7 +94,7 @@ export default function ModelSelector({ value, onChange, borderless }) {
     }
   }
 
-  // 如果正在加载，显示加载状态
+  // If loading, display loading state
   if (loading) {
     return (
       <div className={`flex items-center gap-1 px-2 py-2 rounded bg-transparent text-gray-400 text-base ${borderless ? '' : 'border bg-gray-50'}`}>

@@ -214,7 +214,7 @@ async function proxyGemini25FlashLite(messages, env) {
 }
 
 function streamProxy(res) {
-  // 直接转发流式响应
+  // Forward streaming response directly
   return new Response(res.body, {
     status: res.status,
     headers: {

@@ -17,7 +17,7 @@ export default function ChatInputBar({
     if (!input.trim() || isThinking) return;
     onSend(input);
     setInput("");
-    // 发送后自动聚焦输入框
+    // Auto-focus input box after sending
     setTimeout(() => {
       textareaRef.current?.focus();
     }, 0);
@@ -30,7 +30,7 @@ export default function ChatInputBar({
     }
   };
 
-  // 点击卡片聚焦输入框
+  // Focus input box on card click
   const handleCardClick = (e) => {
     if (e.target === e.currentTarget) {
       textareaRef.current?.focus();
@@ -48,7 +48,7 @@ export default function ChatInputBar({
         } : { minHeight: cardHeight, marginBottom: '16px' }}
         onClick={handleCardClick}
       >
-        {/* 输入框独占一行 */}
+        {/* Input box takes one line */}
         <textarea
           ref={textareaRef}
           className="w-full resize-none rounded-lg px-4 py-3 text-lg focus:outline-none focus:ring-0 focus:border-none border-none shadow-none min-h-[48px] max-h-40 bg-transparent"
@@ -61,7 +61,7 @@ export default function ChatInputBar({
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
         />
-        {/* 下方一行：左模型选择，右发送按钮 */}
+        {/* Bottom line: left model selector, right send button */}
         <div className="flex items-center justify-between w-full gap-2 mt-2">
           <div className="flex-1">
             <ModelSelector value={selectedModel} onChange={setSelectedModel} borderless />

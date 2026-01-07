@@ -6,9 +6,9 @@ export default function MessageItem({ message }) {
   const isUser = message.role === "user";
 
   if (!isUser) {
-    // AI 消息：AI回复内容在下，分析过程在上，默认收起
+    // AI message: AI reply content below, analysis process above, collapsed by default
     if (message.loading) {
-      // AI loading 动画，结构与常规AI消息保持一致（两行）
+      // AI loading animation, structure consistent with regular AI messages (two lines)
       return (
         <div className="flex items-center justify-start mb-2 min-h-[48px]">
           <div className="flex-shrink-0 mr-2 flex items-center">
@@ -31,7 +31,7 @@ export default function MessageItem({ message }) {
           <FaRobot className="text-2xl" style={{ color: '#555' }} />
         </div>
         <div className="flex flex-col w-full">
-          {/* 分析过程（如果有的话） */}
+          {/* Analysis process (if any) */}
           {message.reasoning && (
             <div className="border-l-4 border-gray-400 pl-3 mb-3">
               <div className="text-sm font-medium text-gray-500 mb-2">
@@ -46,7 +46,7 @@ export default function MessageItem({ message }) {
             </div>
           )}
           
-          {/* AI 回复内容始终在底部 */}
+          {/* AI reply content always at the bottom */}
           <div className="prose prose-blue max-w-none text-base text-gray-900 mt-0 [&>*:first-child]:mt-0">
             <ReactMarkdown>{message.content}</ReactMarkdown>
             {(message.streamingContent || (message.streaming && message.content && !message.reasoning)) && (
@@ -58,7 +58,7 @@ export default function MessageItem({ message }) {
     );
   }
 
-  // 用户消息：使用微信风格气泡形状（绿色气泡，右下角带小三角），浅灰背景，深色文字
+  // User message: Use WeChat-style bubble shape (green bubble with small triangle at bottom right), light gray background, dark text
   return (
     <div className="flex items-center justify-end mb-2">
       <div className="relative max-w-[80%] flex items-center">
@@ -67,7 +67,7 @@ export default function MessageItem({ message }) {
             <ReactMarkdown>{message.content}</ReactMarkdown>
           </div>
         </div>
-        {/* 微信风格右下角三角，SVG与圆角自然衔接 */}
+        {/* WeChat-style triangle at bottom right, SVG naturally connects with rounded corners */}
         <svg
           className="absolute right-[-10px] bottom-2"
           width="16" height="18" viewBox="0 0 16 18" fill="none"

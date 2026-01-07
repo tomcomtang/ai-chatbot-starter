@@ -1,11 +1,11 @@
-// AI API 请求模块
+// AI API request module
 
-// 解析分析过程和回答的函数
+// Function to parse analysis process and answer
 function parseReasoningAndContent(fullContent) {
-  // 尝试匹配中文格式
+  // Try to match Chinese format
   let reasoningMatch = fullContent.match(/\*\*分析过程：\*\*\s*\n([\s\S]*?)(?=\n\*\*回答：\*\*)/);
   let contentMatch = fullContent.match(/\*\*回答：\*\*\s*\n([\s\S]*)/);
-  // 如果没有找到中文格式，尝试匹配英文格式
+  // If Chinese format not found, try matching English format
   if (!reasoningMatch) {
     reasoningMatch = fullContent.match(/\*\*Analysis Process:\*\*\s*\n([\s\S]*?)(?=\n\*\*Answer:\*\*)/);
     contentMatch = fullContent.match(/\*\*Answer:\*\*\s*\n([\s\S]*)/);
@@ -17,9 +17,9 @@ function parseReasoningAndContent(fullContent) {
 
 export async function fetchAIStreamResponse(model, text, messages, onChunk) {
   let aiContent = "";
-  let aiReasoning = ""; // 专门存储 DeepSeek Reasoner 的 reasoning_content
+  let aiReasoning = ""; // Specifically stores DeepSeek Reasoner's reasoning_content
   const controller = new AbortController();
-  // 超时时间设为10分钟（600000毫秒）
+  // Set timeout to 10 minutes (600000 milliseconds)
   const timeoutId = setTimeout(() => controller.abort(), 600000);
   try {
     const res = await fetch("/api/ai", {
@@ -30,7 +30,7 @@ export async function fetchAIStreamResponse(model, text, messages, onChunk) {
     });
     clearTimeout(timeoutId);
     if (!res.ok) {
-      // 尝试解析错误响应
+      // Try to parse error response
       let errorMessage = `HTTP error! status: ${res.status} ${res.statusText}`;
       try {
         const errorData = await res.json();
@@ -38,7 +38,7 @@ export async function fetchAIStreamResponse(model, text, messages, onChunk) {
           errorMessage = errorData.error;
         }
       } catch (e) {
-        // 如果无法解析JSON，使用默认错误信息
+        // If JSON cannot be parsed, use default error message
       }
       throw new Error(errorMessage);
     }
@@ -56,13 +56,13 @@ export async function fetchAIStreamResponse(model, text, messages, onChunk) {
         if (line.startsWith('data: ')) {
           const data = line.slice(6);
           if (data === '[DONE]') {
-            // 检查是否是 DeepSeek Reasoner（有 reasoning_content）
+            // Check if it's DeepSeek Reasoner (has reasoning_content)
             if (aiReasoning) {
-              // DeepSeek Reasoner：使用分离的 reasoning 和 content
+              // DeepSeek Reasoner: use separated reasoning and content
               onChunk(aiContent, aiReasoning, true);
               return { aiContent, aiReasoning };
             } else {
-              // 其他模型：使用解析函数
+              // Other models: use parsing function
               const { reasoning, content } = parseReasoningAndContent(aiContent);
               onChunk(content, reasoning, true);
               return { aiContent: content, aiReasoning: reasoning };
@@ -71,54 +71,54 @@ export async function fetchAIStreamResponse(model, text, messages, onChunk) {
           }
           try {
             const json = JSON.parse(data);
-            // 兼容不同AI服务的流式字段
+            // Compatible with different AI service streaming fields
             let chunk = "";
             let reasoningChunk = "";
             
-            // Claude 格式: content_block_delta
+            // Claude format: content_block_delta
             if (json.type === 'content_block_delta' && json.delta?.type === 'text_delta') {
               chunk = json.delta.text;
             }
-            // DeepSeek Reasoner 格式: 分离 reasoning_content 和 content
+            // DeepSeek Reasoner format: separated reasoning_content and content
             else if (json.choices?.[0]?.delta?.reasoning_content) {
               reasoningChunk = json.choices[0].delta.reasoning_content;
             }
-            // DeepSeek Reasoner 的 content 部分
+            // DeepSeek Reasoner content part
             else if (json.choices?.[0]?.delta?.content && aiReasoning) {
-              // 如果已经有 reasoning_content，那么这个 content 就是最终答案
+              // If reasoning_content already exists, this content is the final answer
               chunk = json.choices[0].delta.content;
             }
-            // OpenAI 格式: choices[0].delta.content
+            // OpenAI format: choices[0].delta.content
             else if (json.choices?.[0]?.delta?.content) {
               chunk = json.choices[0].delta.content;
             }
-            // Gemini 格式: candidates[0].content.parts[0].text
+            // Gemini format: candidates[0].content.parts[0].text
             else if (json.candidates?.[0]?.content?.parts?.[0]?.text) {
               chunk = json.candidates[0].content.parts[0].text;
             }
             
             if (chunk || reasoningChunk) {
               if (reasoningChunk) {
-                // 处理 DeepSeek Reasoner 的 reasoning_content
+                // Process DeepSeek Reasoner's reasoning_content
                 aiReasoning += reasoningChunk;
-                // 对于 DeepSeek Reasoner，直接使用 reasoning_content 作为分析过程
+                // For DeepSeek Reasoner, directly use reasoning_content as analysis process
                 onChunk(aiContent, aiReasoning, false);
               } else if (chunk) {
-                // 处理普通 content
+                // Process regular content
                 aiContent += chunk;
                 const { reasoning, content } = parseReasoningAndContent(aiContent);
                 onChunk(content, reasoning, false);
               }
             }
             
-            // 检查 Claude 的结束信号
+            // Check Claude's end signal
             if (json.type === 'message_stop') {
               if (aiReasoning) {
-                // DeepSeek Reasoner：使用分离的 reasoning 和 content
+                // DeepSeek Reasoner: use separated reasoning and content
                 onChunk(aiContent, aiReasoning, true);
                 return { aiContent, aiReasoning };
               } else {
-                // 其他模型：使用解析函数
+                // Other models: use parsing function
                 const { reasoning, content } = parseReasoningAndContent(aiContent);
                 onChunk(content, reasoning, true);
                 return { aiContent: content, aiReasoning: reasoning };
@@ -131,14 +131,14 @@ export async function fetchAIStreamResponse(model, text, messages, onChunk) {
         }
       }
     }
-    // 补充：流关闭但没收到 [DONE]，这里补一次结束
+    // Supplement: stream closed but no [DONE] received, add one more end here
     if (!isComplete && (aiContent || aiReasoning)) {
       if (aiReasoning) {
-        // DeepSeek Reasoner：使用分离的 reasoning 和 content
+        // DeepSeek Reasoner: use separated reasoning and content
         onChunk(aiContent, aiReasoning, true);
         return { aiContent, aiReasoning };
       } else {
-        // 其他模型：使用解析函数
+        // Other models: use parsing function
         const { reasoning, content } = parseReasoningAndContent(aiContent);
         onChunk(content, reasoning, true);
         return { aiContent: content, aiReasoning: reasoning };
@@ -147,7 +147,7 @@ export async function fetchAIStreamResponse(model, text, messages, onChunk) {
   } catch (e) {
     console.error(e);
     clearTimeout(timeoutId);
-    // 重新抛出错误，让调用方处理
+    // Re-throw error for caller to handle
     throw e;
   }
   return { aiContent, aiReasoning: "" };

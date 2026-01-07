@@ -1,6 +1,6 @@
 export async function onRequest({ request, env }) {
   try {
-    // 设置CORS头
+    // Set CORS headers
     const headers = {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
@@ -8,12 +8,12 @@ export async function onRequest({ request, env }) {
       'Access-Control-Allow-Headers': 'Content-Type',
     };
 
-    // 处理OPTIONS请求（预检请求）
+    // Handle OPTIONS request (preflight request)
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 200, headers });
     }
 
-    // 只允许POST请求
+    // Only allow POST requests
     if (request.method !== 'POST') {
       return new Response(JSON.stringify({ error: 'Method not allowed' }), { 
         status: 405, 
@@ -23,7 +23,7 @@ export async function onRequest({ request, env }) {
 
     const models = [];
     
-    // 检查环境变量并添加对应的模型
+    // Check environment variables and add corresponding models
     if (env.DEEPSEEK_API_KEY) {
       models.push(
         { value: "deepseek-chat", label: "DeepSeek-V3", disabled: false },
@@ -50,7 +50,7 @@ export async function onRequest({ request, env }) {
       models.push({ value: "nebius-studio", label: "Nebius Studio", disabled: false });
     }
     
-    // 如果没有配置任何API密钥，返回默认的DeepSeek模型
+    // If no API keys are configured, return default DeepSeek models
     if (models.length === 0) {
       models.push(
         { value: "deepseek-chat", label: "DeepSeek-V3", disabled: false },
