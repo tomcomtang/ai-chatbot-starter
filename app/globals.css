@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 美化 markdown 渲染的 prose 样式 */
+/* Beautify markdown prose styles */
 .prose {
   font-size: 1.05rem;
   line-height: 1.8;
@@ -60,7 +60,7 @@
   border-radius: 0 6px 6px 0;
 }
 
-/* 保证AI消息icon和内容首行顶部严格对齐 */
+/* Ensure AI message icon aligns with first line of content */
 .prose > *:first-child {
   margin-top: 0 !important;
   padding-top: 0 !important;
@@ -73,7 +73,7 @@
   overflow-x: auto;
 }
 
-/* 回到底部按钮美化 */
+/* Scroll to bottom button styles */
 .scroll-to-bottom-btn {
   background: #e5e7eb;
   border: none;
