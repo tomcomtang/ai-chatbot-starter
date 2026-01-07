@@ -2,13 +2,13 @@
 
 // Function to parse analysis process and answer
 function parseReasoningAndContent(fullContent) {
-  // Try to match Chinese format
-  let reasoningMatch = fullContent.match(/\*\*分析过程：\*\*\s*\n([\s\S]*?)(?=\n\*\*回答：\*\*)/);
-  let contentMatch = fullContent.match(/\*\*回答：\*\*\s*\n([\s\S]*)/);
-  // If Chinese format not found, try matching English format
+  // Try to match English format first
+  let reasoningMatch = fullContent.match(/\*\*Analysis Process:\*\*\s*\n([\s\S]*?)(?=\n\*\*Answer:\*\*)/);
+  let contentMatch = fullContent.match(/\*\*Answer:\*\*\s*\n([\s\S]*)/);
+  // If English format not found, try matching Chinese format for compatibility
   if (!reasoningMatch) {
-    reasoningMatch = fullContent.match(/\*\*Analysis Process:\*\*\s*\n([\s\S]*?)(?=\n\*\*Answer:\*\*)/);
-    contentMatch = fullContent.match(/\*\*Answer:\*\*\s*\n([\s\S]*)/);
+    reasoningMatch = fullContent.match(/\*\*分析过程：\*\*\s*\n([\s\S]*?)(?=\n\*\*回答：\*\*)/);
+    contentMatch = fullContent.match(/\*\*回答：\*\*\s*\n([\s\S]*)/);
   }
   const reasoning = reasoningMatch ? reasoningMatch[1].trim() : "";
   const content = contentMatch ? contentMatch[1].trim() : fullContent;
