@@ -2,9 +2,6 @@
 
 A modern AI chatbot template built on Tencent Cloud EdgeOne, supporting multiple AI models with real-time streaming responses. No traditional backend required.
 
-## Deploy
-
-[![Deploy to EdgeOne](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://edgeone.ai/pages/new?template=https://github.com/tomcomtang/ai-chatbot-starter&output-directory=./public&build-command=npm%20run%20build&install-command=npm%20install)
 
 Click the button above to deploy directly to Tencent Cloud EdgeOne Pages.
 
